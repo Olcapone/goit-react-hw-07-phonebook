@@ -28,7 +28,26 @@ const filter = createReducer(initialState.contacts.filter, {
   [actions.changeFilter]: (_, { payload }) => payload,
 });
 
+const entities = createReducer([], {
+  [actions.fetchContactsSuccess]: (_, { payload }) => [payload],
+});
+
+const isLoading = createReducer(false, {
+  [actions.fetchContactsRequest]: () => true,
+  [actions.fetchContactsSuccess]: () => false,
+  [actions.fetchContactsError]: () => false,
+});
+
+const error = createReducer(null, {
+  [actions.fetchContactsError]: (_, { payload }) => payload,
+  [actions.fetchContactsRequest]: () => null,
+});
+
 export default combineReducers({
   items,
   filter,
+
+  entities,
+  isLoading,
+  error,
 });
