@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import shortid from "shortid";
 //=== redux
 import { connect, useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import actions from "../../redux/contacts/contacts-actions";
+//import actions from "../../redux/contacts/contacts-actions";
 import * as operations from "../../redux/contacts/contacts-operations";
 import * as contactSelectors from "../../redux/contacts/contacts-selectors";
 import getContact from "../../utils/getContact";
@@ -12,26 +12,25 @@ import getContact from "../../utils/getContact";
 import s from "./ContactList.module.css";
 
 function ContactList({ onDelete }) {
-  const [contact, setContacts] = useState([]);
+  //const [cont, setContacts] = useState([]);
   const dispatch = useDispatch();
-  const conts = useSelector(contactSelectors.getContacts);
+  const contact = useSelector(contactSelectors.getContacts);
 
-  useEffect(() => dispatch(operations.fetchContact()), [dispatch]);
-
-  // fetchContact().then((data) => {
-  // setContacts(data)
+  useEffect(() => {
+    dispatch(operations.fetchContact());
+  }, [dispatch]);
 
   return (
     <>
-      {conts.length > 0 && (
+      {contact.length !== 0 && (
         <ul className={s.list}>
-          {contact.map(({ name, number }) => (
+          {contact.map(({ name, number, id }) => (
             <li className={s.item} key={shortid.generate()}>
               {name} : {number}{" "}
               <button
                 className={s.button}
                 type="button"
-                onClick={() => onDelete(name)}
+                onClick={() => onDelete(id)}
               >
                 Delete
               </button>
@@ -43,12 +42,12 @@ function ContactList({ onDelete }) {
   );
 }
 
-const mapStateToProps = ({ contacts: { filter, items } }) => ({
-  contact: getContact(filter, items),
+const mapStateToProps = ({ contacts: { filter, entities } }) => ({
+  contact: getContact(filter, entities),
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onDelete: (name) => dispatch(actions.deleteContact(name)),
+  onDelete: (id) => dispatch(operations.deleteContact(id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ContactList);

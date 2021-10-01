@@ -1,52 +1,36 @@
 import { combineReducers } from "redux";
 import { createReducer } from "@reduxjs/toolkit";
 import actions from "./contacts-actions";
+import { fetchContact } from "./contacts-operations";
 
-const initialState = {
-  contacts: {
-    items: [
-      { id: "id-1", name: "Rosie Simpson", number: "459-12-56" },
-      { id: "id-2", name: "Hermione Kline", number: "443-89-12" },
-      { id: "id-3", name: "Eden Clements", number: "645-17-79" },
-      { id: "id-4", name: "Annie Copeland", number: "227-91-26" },
-    ],
-    filter: "",
-  },
-};
-
-const items = createReducer(initialState.contacts.items, {
-  [actions.addContact]: (state, { payload }) =>
+const entities = createReducer([], {
+  [fetchContact.fulfilled]: (_, { payload }) => payload,
+  [actions.addContactSuccess]: (state, { payload }) =>
     state.find((contact) => contact.name.includes(payload.name))
       ? state
       : [...state, payload],
 
-  [actions.deleteContact]: (state, { payload }) =>
-    state.filter(({ name }) => name !== payload),
+  [actions.deleteContactSuccess]: (state, { payload }) =>
+    state.filter(({ id }) => id !== payload),
 });
 
-const filter = createReducer(initialState.contacts.filter, {
+const filter = createReducer("", {
   [actions.changeFilter]: (_, { payload }) => payload,
 });
 
-const entities = createReducer([], {
-  [actions.fetchContactsSuccess]: (_, { payload }) => [payload],
-});
-
 const isLoading = createReducer(false, {
-  [actions.fetchContactsRequest]: () => true,
-  [actions.fetchContactsSuccess]: () => false,
-  [actions.fetchContactsError]: () => false,
+  [fetchContact.pending]: () => true,
+  [fetchContact.fulfilled]: () => false,
+  [fetchContact.rejected]: () => false,
 });
 
 const error = createReducer(null, {
-  [actions.fetchContactsError]: (_, { payload }) => payload,
-  [actions.fetchContactsRequest]: () => null,
+  [fetchContact.rejected]: (_, { payload }) => payload,
+  [fetchContact.pending]: () => null,
 });
 
 export default combineReducers({
-  items,
   filter,
-
   entities,
   isLoading,
   error,
