@@ -35,10 +35,10 @@ function ContactForm({ onSubmit }) {
 
     if (!contacts.find((contact) => contact.name.includes(stateName))) {
       onSubmit({ stateName, number });
-      reset();
     } else {
       toast.warning("Contact already exists!");
     }
+    reset();
   };
 
   return (
