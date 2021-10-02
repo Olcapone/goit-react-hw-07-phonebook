@@ -7,3 +7,5 @@ export const getContacts = (state) => {
         name.toLowerCase().includes(filter.toLowerCase())
       );
 };
+
+export const getAllContact = (state) => state.contacts.entities;

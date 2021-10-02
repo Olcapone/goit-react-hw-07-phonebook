@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 //===redux
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import * as operations from "../../redux/contacts/contacts-operations";
 //===styles
 import s from "./ContactForm.module.css";
+import { getAllContact } from "../../redux/contacts/contacts-selectors";
 
 function ContactForm({ onSubmit }) {
   const [stateName, setName] = useState("");
   const [number, setNumber] = useState("");
+  const contacts = useSelector(getAllContact);
 
   const reset = () => {
     setName("");
@@ -29,8 +31,14 @@ function ContactForm({ onSubmit }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit({ stateName, number });
-    reset();
+
+    if (!contacts.find((contact) => contact.name.includes(stateName))) {
+      console.log("not dublicated!");
+      onSubmit({ stateName, number });
+      reset();
+    } else {
+      console.log("is dublicated!");
+    }
   };
 
   return (

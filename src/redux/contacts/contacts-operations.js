@@ -1,5 +1,4 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-//import axios from "axios";
 import shortid from "shortid";
 
 import actions from "./contacts-actions";
@@ -13,19 +12,17 @@ export const fetchContact = createAsyncThunk(
   }
 );
 
-export const addContacts = (text) => (dispatch) => {
-  const { stateName, number } = text;
-  const user = { id: shortid.generate(), name: stateName, number };
-  console.log(user);
+export const addContacts =
+  ({ stateName, number }, contacts) =>
+  (dispatch) => {
+    const user = { id: shortid.generate(), name: stateName, number };
 
-  dispatch(actions.addContactRequest());
+    dispatch(actions.addContactRequest());
 
-  // axios
-  // .post(`/items`, user)
-  ContactsAPI.addContact(user)
-    .then(({ data }) => dispatch(actions.addContactSuccess(data)))
-    .catch((error) => dispatch(actions.addContactError(error)));
-};
+    ContactsAPI.addContact(user)
+      .then(({ data }) => dispatch(actions.addContactSuccess(data)))
+      .catch((error) => dispatch(actions.addContactError(error)));
+  };
 
 export const deleteContact = (userId) => (dispatch) => {
   dispatch(actions.deleteContactRequest());
@@ -34,10 +31,3 @@ export const deleteContact = (userId) => (dispatch) => {
     .then(() => dispatch(actions.deleteContactSuccess(userId)))
     .catch((error) => dispatch(actions.deleteContactError(error)));
 };
-
-// "deleteContactsRequest",
-// async () => {
-//   // axios.delete(`/items/${name}`)
-//   const contacts =
-//   return contacts;
-// }

@@ -5,14 +5,14 @@ import { connect, useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 
 import * as operations from "../../redux/contacts/contacts-operations";
-import * as contactSelectors from "../../redux/contacts/contacts-selectors";
+import { getContacts } from "../../redux/contacts/contacts-selectors";
 
 //=== styles
 import s from "./ContactList.module.css";
 
 function ContactList({ onDelete }) {
   const dispatch = useDispatch();
-  const contact = useSelector(contactSelectors.getContacts);
+  const contact = useSelector(getContacts);
 
   useEffect(() => {
     dispatch(operations.fetchContact());
