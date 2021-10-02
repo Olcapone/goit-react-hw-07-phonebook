@@ -1,9 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
 import shortid from "shortid";
 
 import actions from "./contacts-actions";
 import * as ContactsAPI from "../../Api/Api";
-import { toast } from "react-toastify";
 
 export const fetchContact = createAsyncThunk(
   "fetchContactsRequest",
@@ -14,7 +14,7 @@ export const fetchContact = createAsyncThunk(
 );
 
 export const addContacts =
-  ({ stateName, number }, contacts) =>
+  ({ stateName, number }) =>
   (dispatch) => {
     const user = { id: shortid.generate(), name: stateName, number };
 
