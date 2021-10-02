@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 //===redux
 import { connect, useSelector } from "react-redux";
@@ -33,11 +34,10 @@ function ContactForm({ onSubmit }) {
     e.preventDefault();
 
     if (!contacts.find((contact) => contact.name.includes(stateName))) {
-      console.log("not dublicated!");
       onSubmit({ stateName, number });
       reset();
     } else {
-      console.log("is dublicated!");
+      toast.warning("Contact already exists!");
     }
   };
 

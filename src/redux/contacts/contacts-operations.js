@@ -3,6 +3,7 @@ import shortid from "shortid";
 
 import actions from "./contacts-actions";
 import * as ContactsAPI from "../../Api/Api";
+import { toast } from "react-toastify";
 
 export const fetchContact = createAsyncThunk(
   "fetchContactsRequest",
@@ -20,14 +21,26 @@ export const addContacts =
     dispatch(actions.addContactRequest());
 
     ContactsAPI.addContact(user)
-      .then(({ data }) => dispatch(actions.addContactSuccess(data)))
-      .catch((error) => dispatch(actions.addContactError(error)));
+      .then(({ data }) => {
+        toast.success("Contact successfully added!");
+        return dispatch(actions.addContactSuccess(data));
+      })
+      .catch((error) => {
+        toast.error("Contact is not added! Something wrong!");
+        return dispatch(actions.addContactError(error));
+      });
   };
 
 export const deleteContact = (userId) => (dispatch) => {
   dispatch(actions.deleteContactRequest());
 
   ContactsAPI.deleteContact(userId)
-    .then(() => dispatch(actions.deleteContactSuccess(userId)))
-    .catch((error) => dispatch(actions.deleteContactError(error)));
+    .then(() => {
+      toast.success("Contact successfully deleted!");
+      return dispatch(actions.deleteContactSuccess(userId));
+    })
+    .catch((error) => {
+      toast.error("Contact is not deleted! Something wrong!");
+      return dispatch(actions.deleteContactError(error));
+    });
 };
