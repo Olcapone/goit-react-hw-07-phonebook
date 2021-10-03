@@ -33,7 +33,11 @@ function ContactForm({ onSubmit }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!contacts.find((contact) => contact.name.includes(stateName))) {
+    if (
+      !contacts.find(
+        (contact) => contact.name === stateName || contact.number === number
+      )
+    ) {
       onSubmit({ stateName, number });
     } else {
       toast.warning("Contact already exists!");

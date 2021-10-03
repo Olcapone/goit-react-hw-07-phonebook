@@ -6,7 +6,10 @@ import { fetchContact } from "./contacts-operations";
 const entities = createReducer([], {
   [fetchContact.fulfilled]: (_, { payload }) => payload,
   [actions.addContactSuccess]: (state, { payload }) =>
-    state.find((contact) => contact.name.includes(payload.name))
+    state.find(
+      (contact) =>
+        contact.name === payload.name || contact.number === payload.number
+    )
       ? state
       : [...state, payload],
 
